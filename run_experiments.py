@@ -32,27 +32,36 @@ BEST_CONFIG = {
     "N_HIDDEN": 1,
     "BATCH_SIZE": 2048,
     "LEARNING_RATE": 1e-2,
-    "WEIGHT_DECAY": 1e-2,
-    "DROPOUT": 0.0,
+    "WEIGHT_DECAY": 0.1,
+    "DROPOUT": 0.1,
 }
 
 # --- Experiments to run ---
 # Each experiment: (description, {overrides})
 EXPERIMENTS = [
-    # Baseline
-    ("baseline", {}),
-
-    # Final 5 variants based on R1+R2 findings:
-    # V1: Bigram baseline (simplest possible)
-    ("V1 bigram block=1 emb=16 hidden=64", {"BLOCK_SIZE": 1, "EMB_DIM": 16, "HIDDEN_DIM": 64}),
-    # V2: Trigram linear (no hidden layer)
-    ("V2 block=3 emb=16 linear", {"HIDDEN_DIM": 0}),
-    # V3: Best from R2 — higher weight decay
-    ("V3 block=3 emb=16 hidden=128 wd=0.1", {"WEIGHT_DECAY": 0.1}),
-    # V4: Dropout regularization
-    ("V4 block=3 emb=16 hidden=128 drop=0.1", {"DROPOUT": 0.1}),
-    # V5: Combined best settings
-    ("V5 block=3 emb=16 hidden=128 wd=0.1 drop=0.1", {"WEIGHT_DECAY": 0.1, "DROPOUT": 0.1}),
+    # R3: Push from best (wd=0.1, drop=0.1, val=2.0364)
+    # LR sweep around 1e-2
+    ("R3 lr=5e-3", {"LEARNING_RATE": 5e-3}),
+    ("R3 lr=2e-2", {"LEARNING_RATE": 2e-2}),
+    ("R3 lr=3e-2", {"LEARNING_RATE": 3e-2}),
+    # Dropout fine-tune
+    ("R3 drop=0.15", {"DROPOUT": 0.15}),
+    ("R3 drop=0.2", {"DROPOUT": 0.2}),
+    # Weight decay fine-tune
+    ("R3 wd=0.05", {"WEIGHT_DECAY": 0.05}),
+    ("R3 wd=0.2", {"WEIGHT_DECAY": 0.2}),
+    # Context length with regularization
+    ("R3 block=4", {"BLOCK_SIZE": 4}),
+    ("R3 block=5 drop=0.15", {"BLOCK_SIZE": 5, "DROPOUT": 0.15}),
+    # Batch size
+    ("R3 bs=512", {"BATCH_SIZE": 512}),
+    ("R3 bs=1024", {"BATCH_SIZE": 1024}),
+    # Hidden size
+    ("R3 hidden=200", {"HIDDEN_DIM": 200}),
+    ("R3 hidden=64", {"HIDDEN_DIM": 64}),
+    # Embedding dim
+    ("R3 emb=8", {"EMB_DIM": 8}),
+    ("R3 emb=32", {"EMB_DIM": 32}),
 ]
 
 

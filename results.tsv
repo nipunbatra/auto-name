@@ -5,3 +5,18 @@ run	val_loss	params_K	status	time_s	improv_%	description	samples
 004	2.0808	10.2	keep	121	7.4	V3 block=3 emb=16 hidden=128 wd=0.1 NEW BEST!	padmita|chana|nee|man|putin
 005	2.1664	10.2	discard	123	3.6	V4 block=3 emb=16 hidden=128 drop=0.1	bon|sukhal|abi|gurba|ranmateen
 006	2.0364	10.2	keep	121	9.4	V5 block=3 emb=16 hidden=128 wd=0.1 drop=0.1 NEW BEST!	snima|sma|jotya|shabila|akrash
+007	2.0440	10.2	discard	121	9.1	R3 lr=5e-3	anveer|arinder|shra|laveer|sand
+008	2.0536	10.2	discard	121	8.6	R3 lr=2e-2	baboyu|aal|satga|achhal|su
+009	2.0604	10.2	discard	121	8.3	R3 lr=3e-2	tha|shod|nna|jmitshal|subnoojanavgala
+010	2.0351	10.2	keep	121	9.5	R3 drop=0.15 NEW BEST!	arnuu|ani|chnasatan|iqar|sudhan
+011	2.0260	10.2	keep	121	9.9	R3 drop=0.2 NEW BEST!	ajmeri|mjaichanam|badkir|deshramjedutan|nardeepal
+012	2.0683	10.2	discard	121	8.0	R3 wd=0.05	chtar|sehjendra|eddha|jubi|mancher
+013	2.0349	10.2	discard	121	9.5	R3 wd=0.2	dher|som|jishaibanuprya|muli|pushispna
+014	2.0399	12.2	discard	121	9.2	R3 block=4	prate|radhabrando|chittu|shoshina|ramjen
+015	2.1094	14.3	discard	121	6.2	R3 block=5 drop=0.15	surith|dakseng|avishil|giri|antram
+016	2.0430	10.2	discard	122	9.1	R3 bs=512	mukkha|nasangveet|satoly|tarirjo|shamodmaleeshbh
+017	2.0470	10.2	discard	122	8.9	R3 bs=1024	dim|farzuhangushtra|thini|mangu|roogast
+018	2.0635	15.7	discard	122	8.2	R3 hidden=200	basarshwan|binasrand|aari|golwanno|vanikishambabud
+019	2.0352	5.3	discard	122	9.5	R3 hidden=64	pana|jarjiteitu|aftra|shail|sujanar
+020	2.0605	6.9	discard	121	8.3	R3 emb=8	shohar|jutender|saveere|azeem|magmida
+021	2.0719	16.8	discard	121	7.8	R3 emb=32	mana|shareshandharam|mahwar|obkant|manav
