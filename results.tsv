@@ -1,0 +1,7 @@
+run	val_loss	params_K	status	time_s	improv_%	description	samples
+001	2.2477	10.2	keep	121	0.0	baseline NEW BEST!	dhanavva|aanath|perdoshanka|archnnala|girdoma
+002	2.3899	3.3	discard	122	-6.3	V1 bigram block=1 emb=16 hidden=64	mehil|raya|m|imaikuteearaz|sagashanshneeba
+003	2.1471	1.8	keep	121	4.5	V2 block=3 emb=16 linear NEW BEST!	zraveshroodda|ukhthi|gorajwat|shmi|dub
+004	2.0808	10.2	keep	121	7.4	V3 block=3 emb=16 hidden=128 wd=0.1 NEW BEST!	padmita|chana|nee|man|putin
+005	2.1664	10.2	discard	123	3.6	V4 block=3 emb=16 hidden=128 drop=0.1	bon|sukhal|abi|gurba|ranmateen
+006	2.0364	10.2	keep	121	9.4	V5 block=3 emb=16 hidden=128 wd=0.1 drop=0.1 NEW BEST!	snima|sma|jotya|shabila|akrash

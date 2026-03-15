@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto-Name: Next-Character Name Generation</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; line-height: 1.6; padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        h1 { color: #58a6ff; margin-bottom: 0.5rem; font-size: 2rem; }
+        h2 { color: #58a6ff; margin: 2rem 0 1rem; font-size: 1.4rem; border-bottom: 1px solid #30363d; padding-bottom: 0.5rem; }
+        p { margin-bottom: 1rem; color: #8b949e; }
+        .subtitle { color: #8b949e; font-size: 1.1rem; margin-bottom: 2rem; }
+        table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        th { background: #161b22; color: #58a6ff; padding: 0.75rem; text-align: left; border-bottom: 2px solid #30363d; }
+        td { padding: 0.75rem; border-bottom: 1px solid #21262d; }
+        tr:hover { background: #161b22; }
+        .keep { color: #3fb950; font-weight: bold; }
+        .discard { color: #f85149; }
+        .best { background: #1a3a1a !important; }
+        img { width: 100%; border-radius: 8px; border: 1px solid #30363d; margin: 1rem 0; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; margin: 1rem 0; }
+        .samples { font-family: monospace; font-size: 0.85rem; color: #7ee787; }
+        .metric { font-size: 2rem; font-weight: bold; color: #3fb950; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        code { background: #161b22; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; }
+        a { color: #58a6ff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Auto-Name</h1>
+    <p class="subtitle">Autoresearch for next-character Indian name generation. Character-level models trained on 6,184 Indian names.</p>
+
+    <div class="grid">
+        <div class="card">
+            <p>Dataset</p>
+            <div class="metric">6,184</div>
+            <p>unique Indian names (train: 5,566 / val: 618)</p>
+        </div>
+        <div class="card">
+            <p>Vocab</p>
+            <div class="metric">27</div>
+            <p>characters (a-z + end token)</p>
+        </div>
+        <div class="card">
+            <p>Training budget</p>
+            <div class="metric">2 min</div>
+            <p>per experiment on CPU</p>
+        </div>
+    </div>
+
+    <h2>Experiment Plot</h2>
+    <img src="experiments_plot.png" alt="Experiment results plot">
+
+    <h2>Results</h2>
+    <div id="results-table"></div>
+
+    <h2>Model Variants</h2>
+    <div class="card">
+        <table>
+            <tr><th>Variant</th><th>block_size</th><th>emb_dim</th><th>hidden</th><th>Description</th></tr>
+            <tr><td>Baseline</td><td>3</td><td>16</td><td>128x1</td><td>Default MLP character model</td></tr>
+            <tr><td>V1</td><td>1</td><td>16</td><td>64x1</td><td>Bigram with small hidden layer</td></tr>
+            <tr><td>V2</td><td>3</td><td>16</td><td>none</td><td>Trigram, direct embedding to output</td></tr>
+            <tr><td>V3</td><td>3</td><td>16</td><td>128x1</td><td>Higher weight decay (0.1)</td></tr>
+            <tr><td>V4</td><td>3</td><td>16</td><td>128x1</td><td>Dropout regularization (0.1)</td></tr>
+            <tr><td>V5</td><td>3</td><td>16</td><td>128x1</td><td>Combined wd=0.1 + dropout=0.1</td></tr>
+        </table>
+    </div>
+
+    <h2>How to Run</h2>
+    <div class="card">
+        <pre><code>python prepare.py              # download data + create train/val split
+python run_experiments.py      # run all experiments
+streamlit run app.py           # interactive demo</code></pre>
+    </div>
+
+    <h2>Based On</h2>
+    <p>
+        Inspired by <a href="https://colab.research.google.com/github/nipunbatra/principles-ai-teaching/blob/main/lecture_demo/L07_next_char.ipynb">L07 Next-Char notebook</a>
+        and <a href="https://github.com/karpathy/autoresearch">Karpathy's autoresearch</a>.
+    </p>
+
+    <script>
+    // Load results.tsv and render table
+    fetch('results.tsv')
+        .then(r => r.text())
+        .then(tsv => {
+            const lines = tsv.trim().split('\n');
+            const headers = lines[0].split('\t');
+            let html = '<table><tr>';
+            headers.forEach(h => html += `<th>${h}</th>`);
+            html += '</tr>';
+
+            let bestLoss = Infinity, bestRow = -1;
+            const rows = lines.slice(1).map(l => l.split('\t'));
+            rows.forEach((r, i) => { if (parseFloat(r[1]) < bestLoss) { bestLoss = parseFloat(r[1]); bestRow = i; }});
+
+            rows.forEach((row, i) => {
+                const cls = i === bestRow ? 'best' : '';
+                html += `<tr class="${cls}">`;
+                row.forEach((cell, j) => {
+                    if (headers[j] === 'status') {
+                        html += `<td class="${cell}">${cell}</td>`;
+                    } else if (headers[j] === 'samples') {
+                        const samples = cell.split('|').filter(s => s);
+                        html += `<td class="samples">${samples.join(', ')}</td>`;
+                    } else {
+                        html += `<td>${cell}</td>`;
+                    }
+                });
+                html += '</tr>';
+            });
+            html += '</table>';
+            document.getElementById('results-table').innerHTML = html;
+        })
+        .catch(() => {
+            document.getElementById('results-table').innerHTML = '<p>Run experiments first to see results.</p>';
+        });
+    </script>
+</body>
+</html>
