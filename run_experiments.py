@@ -33,35 +33,30 @@ BEST_CONFIG = {
     "BATCH_SIZE": 2048,
     "LEARNING_RATE": 1e-2,
     "WEIGHT_DECAY": 0.1,
-    "DROPOUT": 0.1,
+    "DROPOUT": 0.2,
 }
 
 # --- Experiments to run ---
 # Each experiment: (description, {overrides})
+# R4: 5min budget. Best so far: drop=0.2 wd=0.1 (val=2.0260 @2min)
+# With 5min we get 2.5x more steps — should help a lot
 EXPERIMENTS = [
-    # R3: Push from best (wd=0.1, drop=0.1, val=2.0364)
-    # LR sweep around 1e-2
-    ("R3 lr=5e-3", {"LEARNING_RATE": 5e-3}),
-    ("R3 lr=2e-2", {"LEARNING_RATE": 2e-2}),
-    ("R3 lr=3e-2", {"LEARNING_RATE": 3e-2}),
-    # Dropout fine-tune
-    ("R3 drop=0.15", {"DROPOUT": 0.15}),
-    ("R3 drop=0.2", {"DROPOUT": 0.2}),
-    # Weight decay fine-tune
-    ("R3 wd=0.05", {"WEIGHT_DECAY": 0.05}),
-    ("R3 wd=0.2", {"WEIGHT_DECAY": 0.2}),
-    # Context length with regularization
-    ("R3 block=4", {"BLOCK_SIZE": 4}),
-    ("R3 block=5 drop=0.15", {"BLOCK_SIZE": 5, "DROPOUT": 0.15}),
-    # Batch size
-    ("R3 bs=512", {"BATCH_SIZE": 512}),
-    ("R3 bs=1024", {"BATCH_SIZE": 1024}),
-    # Hidden size
-    ("R3 hidden=200", {"HIDDEN_DIM": 200}),
-    ("R3 hidden=64", {"HIDDEN_DIM": 64}),
-    # Embedding dim
-    ("R3 emb=8", {"EMB_DIM": 8}),
-    ("R3 emb=32", {"EMB_DIM": 32}),
+    # Re-establish baseline at 5min
+    ("R4 5min baseline drop=0.2 wd=0.1", {}),
+    # LR: lower LR + more steps might converge better
+    ("R4 lr=5e-3", {"LEARNING_RATE": 5e-3}),
+    ("R4 lr=3e-3", {"LEARNING_RATE": 3e-3}),
+    # Stronger regularization for longer training
+    ("R4 drop=0.3", {"DROPOUT": 0.3}),
+    ("R4 drop=0.25 wd=0.15", {"DROPOUT": 0.25, "WEIGHT_DECAY": 0.15}),
+    # Block size — more context helps with more training
+    ("R4 block=4", {"BLOCK_SIZE": 4}),
+    ("R4 block=5 drop=0.25", {"BLOCK_SIZE": 5, "DROPOUT": 0.25}),
+    # 2 hidden layers (now we have enough steps to train deeper)
+    ("R4 2xhidden=128 drop=0.25", {"N_HIDDEN": 2, "DROPOUT": 0.25}),
+    # Smaller batch = more updates in 5min
+    ("R4 bs=512 lr=5e-3", {"BATCH_SIZE": 512, "LEARNING_RATE": 5e-3}),
+    ("R4 bs=1024 lr=7e-3", {"BATCH_SIZE": 1024, "LEARNING_RATE": 7e-3}),
 ]
 
 
@@ -108,7 +103,7 @@ def apply_config(overrides):
         f.write(src)
 
 
-def run_training(timeout=180):
+def run_training(timeout=400):
     """Run train.py and return (val_loss, params_K, output)."""
     try:
         result = subprocess.run(
@@ -266,7 +261,7 @@ def main():
 
         # Train
         t0 = time.time()
-        val_loss, params_K, samples, output = run_training(timeout=180)
+        val_loss, params_K, samples, output = run_training(timeout=400)
         elapsed = int(time.time() - t0)
 
         if val_loss is None:

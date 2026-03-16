@@ -22,7 +22,7 @@ import json
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
 DATA_URL = "https://raw.githubusercontent.com/balasahebgulave/Dataset-Indian-Names/master/Indian_Names.csv"
 BLOCK_SIZE_MAX = 8       # max context length any experiment can use
-TIME_BUDGET = 120        # training time budget in seconds (2 minutes)
+TIME_BUDGET = 300        # training time budget in seconds (5 minutes)
 VAL_FRACTION = 0.1       # 10% of data for validation
 RANDOM_SEED = 42
 

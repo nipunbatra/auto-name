@@ -20,3 +20,13 @@ run	val_loss	params_K	status	time_s	improv_%	description	samples
 019	2.0352	5.3	discard	122	9.5	R3 hidden=64	pana|jarjiteitu|aftra|shail|sujanar
 020	2.0605	6.9	discard	121	8.3	R3 emb=8	shohar|jutender|saveere|azeem|magmida
 021	2.0719	16.8	discard	121	7.8	R3 emb=32	mana|shareshandharam|mahwar|obkant|manav
+022	2.0465	10.2	discard	302	9.0	R4 5min baseline drop=0.2 wd=0.1	rambi|brahaydhar|rvnasrupinu|jwar|guladdi
+023	2.0344	10.2	discard	301	9.5	R4 lr=5e-3	sanoena|kansuri|majandr|shanti|jayan
+024	2.0376	10.2	discard	301	9.3	R4 lr=3e-3	asivaid|altee|shi|rabharpram|sapish
+025	2.0355	10.2	discard	301	9.4	R4 drop=0.3	sharenhaliya|sat|mar|sharid|dharti
+026	2.0216	10.2	keep	301	10.1	R4 drop=0.25 wd=0.15 NEW BEST!	suprab|munder|raribul|kapal|bir
+027	2.0103	12.2	keep	301	10.6	R4 block=4 NEW BEST!	abin|neeshalid|shamil|sitak|narsman
+028	2.0248	14.3	discard	301	9.9	R4 block=5 drop=0.25	bitraj|pawhana|bhooshanu|sutmilav|honi
+029	2.0332	26.7	discard	301	9.5	R4 2xhidden=128 drop=0.25	hosh|rihprash|chi|umarmanna|vati
+030	2.0394	10.2	discard	301	9.3	R4 bs=512 lr=5e-3	jhulbi|sushvi|amrish|ved|nirasanahanaz
+031	2.0288	10.2	discard	301	9.7	R4 bs=1024 lr=7e-3	mun|dan|kashvin|bali|rahiy

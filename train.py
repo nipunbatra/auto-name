@@ -25,7 +25,7 @@ N_HIDDEN = 1
 BATCH_SIZE = 2048
 LEARNING_RATE = 0.01
 WEIGHT_DECAY = 0.1
-DROPOUT = 0.1
+DROPOUT = 0.2
 
 # ---------------------------------------------------------------------------
 # Model
